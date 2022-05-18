@@ -123,7 +123,7 @@ class Carro{
         this.y-=Math.cos(this.angulo)*this.velocidad;
     }
 
-    dibujar(ctx, color){
+    dibujar(ctx, color, dibujarSensor=false){
 
         if(this.choque){
             ctx.fillStyle="gray";
@@ -138,7 +138,7 @@ class Carro{
         }
         ctx.fill();
 
-        if(this.sensor){
+        if(this.sensor && dibujarSensor){
             this.sensor.dibujar(ctx);
         }
     }

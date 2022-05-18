@@ -17,6 +17,27 @@ class RedNeuronal{
         }
         return salidas;
     }
+
+    static mutar(red,cantidad=1){
+        red.niveles.forEach(nivel => {
+            for(let i=0;i<nivel.biases.length;i++){
+                nivel.biases[i]=interLin(
+                    nivel.biases[i],
+                    Math.random()*2-1,
+                    cantidad
+                )
+            }
+            for(let i=0;i<nivel.weights.length;i++){
+                for(let j=0;j<nivel.weights[i].length;j++){
+                    nivel.weights[i][j]=interLin(
+                        nivel.weights[i][j],
+                        Math.random()*2-1,
+                        cantidad
+                    )
+                }
+            }
+        });
+    }
 }
 
 class Nivel{
