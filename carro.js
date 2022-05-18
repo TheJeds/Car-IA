@@ -10,14 +10,52 @@ class Carro{
         this.maxVelocidad=3;
         this.friccion=0.05;
         this.angulo=0;
+        this.choque=false;
 
         this.sensor = new Sensor(this);
         this.controles=new Controles();
     }
 
     actualizar(calleBordes){
-        this.#move();
+        if(!this.choque){
+            this.#move();
+            this.polygono = this.#crearPolygono();
+            this.choque = this.#detectarChoque(calleBordes);
+        }
         this.sensor.actualizar(calleBordes);
+    }
+
+    #detectarChoque(calleBordes){
+        for(let i = 0; i < calleBordes.length; i++){
+            if(polysIntersec(this.polygono,calleBordes[i])){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    #crearPolygono(){
+        const puntos = [];
+        const rad = Math.hypot(this.ancho, this.alto)/2;
+        const alpha = Math.atan2(this.ancho, this.alto);
+        puntos.push({
+            x:this.x-Math.sin(this.angulo-alpha)*rad,
+            y:this.y-Math.cos(this.angulo-alpha)*rad
+        });
+        puntos.push({
+            x:this.x-Math.sin(this.angulo+alpha)*rad,
+            y:this.y-Math.cos(this.angulo+alpha)*rad
+        });
+        puntos.push({
+            x:this.x-Math.sin(Math.PI+this.angulo-alpha)*rad,
+            y:this.y-Math.cos(Math.PI+this.angulo-alpha)*rad
+        });
+        puntos.push({
+            x:this.x-Math.sin(Math.PI+this.angulo+alpha)*rad,
+            y:this.y-Math.cos(Math.PI+this.angulo+alpha)*rad
+        });
+
+        return puntos;
     }
 
     #move(){
@@ -60,20 +98,19 @@ class Carro{
     }
 
     dibujar(ctx){
-        ctx.save();
-        ctx.translate(this.x,this.y);
-        ctx.rotate(-this.angulo);
+
+        if(this.choque){
+            ctx.fillStyle="gray"
+        }else{
+            ctx.fillStyle="black"
+        }
 
         ctx.beginPath();
-        ctx.rect(
-            -this.ancho/2,
-            -this.alto/2,
-            this.ancho,
-            this.alto
-        );
+        ctx.moveTo(this.polygono[0].x, this.polygono[0].y);
+        for(let i = 1; i < this.polygono.length; i++){
+            ctx.lineTo(this.polygono[i].x, this.polygono[i].y)
+        }
         ctx.fill();
-
-        ctx.restore();
 
         this.sensor.dibujar(ctx);
     }
