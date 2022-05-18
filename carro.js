@@ -1,5 +1,5 @@
 class Carro{
-    constructor(x,y,ancho,alto,tipoControl,maxVelocidad=3){
+    constructor(x,y,ancho,alto,tipoControl,maxVelocidad=5){
         this.x=x;
         this.y=y;
         this.ancho=ancho;

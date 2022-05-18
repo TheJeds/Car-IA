@@ -4,7 +4,7 @@ carroCanvas.width=200;
 const carroCtx = carroCanvas.getContext("2d");
 const calle = new Calle(carroCanvas.width/2,carroCanvas.width*0.9);
 
-const N=100;
+const N=1;
 const carros = generarCarros(N)
 let mejorCarro = carros[0];
 if(localStorage.getItem("mejorCerebro")){
@@ -18,7 +18,18 @@ if(localStorage.getItem("mejorCerebro")){
 }
 
 const trafico = [
-    new Carro(calle.getCarrilCentro(1),-100,30,50,"DUMMY",2)
+    new Carro(calle.getCarrilCentro(1),-100,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(0),-300,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(2),-300,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(0),-500,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(1),-500,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(1),-700,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(2),-700,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(0),-900,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(2),-1100,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(0),-1200,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(1),-1400,30,50,"DUMMY",2),
+    new Carro(calle.getCarrilCentro(2),-1500,30,50,"DUMMY",2),
 ];
 
 animacion();
