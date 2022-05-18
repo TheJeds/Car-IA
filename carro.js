@@ -12,8 +12,13 @@ class Carro{
         this.angulo=0;
         this.choque=false;
 
+        this.useCerebro=tipoControl=="IA";
+
         if(tipoControl!="DUMMY"){
             this.sensor=new Sensor(this);
+            this.cerebro=new RedNeuronal(
+                [this.sensor.contRayo,6,4]
+            );
         }
         this.controles=new Controles(tipoControl);
     }
@@ -26,6 +31,17 @@ class Carro{
         }
         if(this.sensor){
             this.sensor.actualizar(calleBordes,trafico);
+            const offsets=this.sensor.lecturas.map(
+                s=>s==null?0:1-s.offset
+            );
+            const salidas=RedNeuronal.feedForward(offsets,this.cerebro);
+
+            if(this.useCerebro){
+                this.controles.acelerar=salidas[0];
+                this.controles.izquierda=salidas[1];
+                this.controles.derecha=salidas[2];
+                this.controles.reversa=salidas[3];
+            }
         }
     }
 

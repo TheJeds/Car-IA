@@ -1,9 +1,9 @@
-const canvas=document.getElementById("miCanvas");
-canvas.width=200;
+const carroCanvas=document.getElementById("carroCanvas");
+carroCanvas.width=200;
 
-const ctx = canvas.getContext("2d");
-const calle = new Calle(canvas.width/2,canvas.width*0.9);
-const carro=new Carro(calle.getCarrilCentro(1),100,30,50,"KEYS");
+const carroCtx = carroCanvas.getContext("2d");
+const calle = new Calle(carroCanvas.width/2,carroCanvas.width*0.9);
+const carro=new Carro(calle.getCarrilCentro(1),100,30,50,"IA");
 const trafico = [
     new Carro(calle.getCarrilCentro(1),-100,30,50,"DUMMY",2)
 ];
@@ -18,17 +18,17 @@ function animacion(){
 
     carro.actualizar(calle.bordes,trafico);
     
-    canvas.height=window.innerHeight;
+    carroCanvas.height=window.innerHeight;
 
-    ctx.save();
-    ctx.translate(0,-carro.y+canvas.height*0.7);
+    carroCtx.save();
+    carroCtx.translate(0,-carro.y+carroCanvas.height*0.7);
 
-    calle.dibujar(ctx);
+    calle.dibujar(carroCtx);
     for(let i=0; i<trafico.length;i++){
-        trafico[i].dibujar(ctx, "red");
+        trafico[i].dibujar(carroCtx, "red");
     }
-    carro.dibujar(ctx, "black");
+    carro.dibujar(carroCtx, "black");
     
-    ctx.restore();
+    carroCtx.restore();
     requestAnimationFrame(animacion);
 }
