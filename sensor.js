@@ -10,17 +10,21 @@ class Sensor{
         this.lecturas = [];
     }
 
-    actualizar(calleBordes){
+    actualizar(calleBordes,trafico){
         this.#castRayos();
         this.lecturas = [];
         for (let i = 0; i < this.rayos.length; i++) {
             this.lecturas.push(
-                this.#getLecturas(this.rayos[i],calleBordes)
+                this.#getLecturas(
+                    this.rayos[i],
+                    calleBordes,
+                    trafico
+                )
             );
         }
     }
 
-    #getLecturas(rayo,calleBordes){
+    #getLecturas(rayo,calleBordes,trafico){
         let toques=[];
 
         for(let i = 0; i < calleBordes.length; i++){
@@ -32,6 +36,21 @@ class Sensor{
             );
             if(toque){
                 toques.push(toque);
+            }
+        }
+
+        for(let i=0; i < trafico.length; i++){
+            const poly = trafico[i].polygono;
+            for(let j=0; j<poly.length; j++){
+                const valor = getInterseccion(
+                    rayo[0],
+                    rayo[1],
+                    poly[j],
+                    poly[(j+1)%poly.length]
+                );
+                if(valor){
+                    toques.push(valor);
+                }
             }
         }
         

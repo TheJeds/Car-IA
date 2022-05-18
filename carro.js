@@ -1,5 +1,5 @@
 class Carro{
-    constructor(x,y,ancho,alto){
+    constructor(x,y,ancho,alto,tipoControl,maxVelocidad=3){
         this.x=x;
         this.y=y;
         this.ancho=ancho;
@@ -7,27 +7,37 @@ class Carro{
 
         this.velocidad=0;
         this.aceleracion=0.2;
-        this.maxVelocidad=3;
+        this.maxVelocidad=maxVelocidad;
         this.friccion=0.05;
         this.angulo=0;
         this.choque=false;
 
-        this.sensor = new Sensor(this);
-        this.controles=new Controles();
+        if(tipoControl!="DUMMY"){
+            this.sensor=new Sensor(this);
+        }
+        this.controles=new Controles(tipoControl);
     }
 
-    actualizar(calleBordes){
+    actualizar(calleBordes, trafico){
         if(!this.choque){
             this.#move();
             this.polygono = this.#crearPolygono();
-            this.choque = this.#detectarChoque(calleBordes);
+            this.choque = this.#detectarChoque(calleBordes,trafico);
         }
-        this.sensor.actualizar(calleBordes);
+        if(this.sensor){
+            this.sensor.actualizar(calleBordes,trafico);
+        }
     }
 
-    #detectarChoque(calleBordes){
+    #detectarChoque(calleBordes,trafico){
         for(let i = 0; i < calleBordes.length; i++){
             if(polysIntersec(this.polygono,calleBordes[i])){
+                return true;
+            }
+        }
+
+        for(let i = 0; i < trafico.length; i++){
+            if(polysIntersec(this.polygono,trafico[i].polygono)){
                 return true;
             }
         }
@@ -97,12 +107,12 @@ class Carro{
         this.y-=Math.cos(this.angulo)*this.velocidad;
     }
 
-    dibujar(ctx){
+    dibujar(ctx, color){
 
         if(this.choque){
-            ctx.fillStyle="gray"
+            ctx.fillStyle="gray";
         }else{
-            ctx.fillStyle="black"
+            ctx.fillStyle=color;
         }
 
         ctx.beginPath();
@@ -112,6 +122,8 @@ class Carro{
         }
         ctx.fill();
 
-        this.sensor.dibujar(ctx);
+        if(this.sensor){
+            this.sensor.dibujar(ctx);
+        }
     }
 }

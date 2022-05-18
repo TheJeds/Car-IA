@@ -1,11 +1,18 @@
 class Controles{
-    constructor(){
+    constructor(tipo){
         this.acelerar=false;
         this.izquierda=false;
         this.derecha=false;
         this.reversa=false;
 
-        this.#addKeyboardListeners();
+        switch(tipo){
+            case "KEYS":
+                this.#addKeyboardListeners();
+                break;
+            case "DUMMY":
+                this.acelerar=true;
+                break;
+        }
     }
 
     #addKeyboardListeners(){
