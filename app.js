@@ -8,7 +8,7 @@ const carro=new Carro(calle.getCarrilCentro(1),100,30,50);
 animacion();
 
 function animacion(){
-    carro.actualizar();
+    carro.actualizar(calle.bordes);
     
     canvas.height=window.innerHeight;
 

@@ -11,11 +11,13 @@ class Carro{
         this.friccion=0.05;
         this.angulo=0;
 
+        this.sensor = new Sensor(this);
         this.controles=new Controles();
     }
 
-    actualizar(){
+    actualizar(calleBordes){
         this.#move();
+        this.sensor.actualizar(calleBordes);
     }
 
     #move(){
@@ -72,5 +74,7 @@ class Carro{
         ctx.fill();
 
         ctx.restore();
+
+        this.sensor.dibujar(ctx);
     }
 }
